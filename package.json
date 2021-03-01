@@ -1,7 +1,7 @@
 {
-  "name": "coding_campus_api",
+  "name": "coding_school_api",
   "version": "1.0.0",
-  "description": "Coding Campus Backend API",
+  "description": "Coding School Backend API",
   "main": "server.js",
   "type": "module",
   "scripts": {

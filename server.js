@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import chalk from 'chalk';
 import morgan from 'morgan';
 import userRoutes from './routes/userRoutes.js';
-import campusRoutes from './routes/campusRoutes.js';
+import schoolRoutes from './routes/schoolRoutes.js';
 
 // Load env variables - variables is accessible in process.env<variable name>
 dotenv.config();
@@ -21,8 +21,8 @@ if (process.env.NODE_ENV === 'development') {
 // User Routes
 app.use(userRoutes);
 
-// Campuses Routes
-app.use('/api/v1/campuses', campusRoutes);
+// Schools Routes
+app.use('/api/v1/schools', schoolRoutes);
 
 // END OF ROUTES----------------------------------
 
