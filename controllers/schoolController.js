@@ -11,7 +11,11 @@ const getSchools = (req, res) => {
 // @route GET /api/v1/schools/:id
 // @access Public
 const getSchool = (req, res) => {
-  res.json({ success: true, msg: 'Get School by id ' + req.params.id });
+  res.json({
+    success: true,
+    msg: 'Get School by id ' + req.params.id,
+    greeting: req.hello,
+  });
 };
 
 // @desc Create new School

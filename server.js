@@ -4,12 +4,28 @@ import chalk from 'chalk';
 import morgan from 'morgan';
 import userRoutes from './routes/userRoutes.js';
 import schoolRoutes from './routes/schoolRoutes.js';
+import connectDB from './config/db.js';
 
 // Load env variables - variables is accessible in process.env<variable name>
 dotenv.config();
 
+// Connect to database
+connectDB();
+
 // Create express app
 const app = express();
+
+// Middleware - Get request detail
+// const logger = (req, res, next) => {
+//   console.log(
+//     `Method: ${req.method} | Protocol: ${req.protocol} | Host: ${req.get(
+//       'host'
+//     )} | URL: ${req.originalUrl}`
+//   );
+//   next();
+// };
+
+// app.use(logger);
 
 // HTTP Request Logger (morgan) - ONLY in Development Mode
 if (process.env.NODE_ENV === 'development') {
@@ -37,3 +53,10 @@ app.listen(
     )
   )
 );
+
+//Handle unhandled promise rejections
+process.on('unhandledRejection', (err, promise) => {
+  console.log(chalk.red(`Unhandled Rejetion Error: ${err.message}`));
+  // Close server & exit process
+  // server.close(() => process.exit(1));
+});
