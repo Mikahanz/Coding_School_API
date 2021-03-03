@@ -15,6 +15,11 @@ connectDB();
 // Create express app
 const app = express();
 
+/*
+ * This is a built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser.
+ */
+app.use(express.json());
+
 // Middleware - Get request detail
 // const logger = (req, res, next) => {
 //   console.log(
