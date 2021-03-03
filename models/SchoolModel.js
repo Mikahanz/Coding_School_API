@@ -109,6 +109,7 @@ SchoolSchema.pre('save', function (next) {
   next();
 });
 
+// Mongoose pre Hooks middleware
 // Geocoder & create location field
 SchoolSchema.pre('save', async function (next) {
   const loc = await geocoder.geocode(this.address);
