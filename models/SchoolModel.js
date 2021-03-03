@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import slugify from 'slugify';
 import { validateURL, validateEmail } from '../utils/myValidatorUtils.js';
 
 const SchoolSchema = new mongoose.Schema({
@@ -99,6 +100,12 @@ const SchoolSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+// Create School slug from the name
+SchoolSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
 });
 
 export default mongoose.model('School', SchoolSchema);
