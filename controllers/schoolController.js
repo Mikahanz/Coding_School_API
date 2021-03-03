@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import SchoolModel from '../models/SchoolModel.js';
 
 // TODO SCHOOL CONTROLLER
@@ -9,7 +10,9 @@ const getSchools = async (req, res) => {
   try {
     const schools = await SchoolModel.find({});
 
-    res.status(200).json({ success: true, data: schools });
+    res
+      .status(200)
+      .json({ success: true, count: schools.length, data: schools });
   } catch (error) {
     res.status(400).json({ success: false });
   }
@@ -47,15 +50,43 @@ const createSchool = async (req, res) => {
 // @desc Update School
 // @route UPDATE /api/v1/schools/:id
 // @access Public
-const updateSchools = (req, res) => {
-  res.json({ success: true, msg: 'Update School by id ' + req.params.id });
+const updateSchools = async (req, res) => {
+  try {
+    // new: true - means that the new update data will be the new data
+    // runValidators - mean that the update data will be validated by the model
+    const school = await SchoolModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!school) {
+      return res.status(400).json({ success: false });
+    }
+
+    res.status(200).json({ success: true, data: school });
+  } catch (error) {
+    console.error(chalk.redBright(error.message));
+    res.status(400).json({ success: false });
+  }
 };
 
 // @desc Delete School by id
 // @route DELETE /api/v1/schools/:id
 // @access Public
-const deleteSchool = (req, res) => {
-  res.json({ success: true, msg: 'Delete Schools by id ' + req.params.id });
+const deleteSchool = async (req, res) => {
+  try {
+    const school = await SchoolModel.findByIdAndDelete(req.params.id);
+
+    if (!school) {
+      return res.status(400).json({ success: false });
+    }
+
+    res.status(200).json({ success: true, data: {} });
+  } catch (error) {
+    console.error(chalk.redBright(error.message));
+    res.status(400).json({ success: false });
+  }
 };
 
 export { getSchools, createSchool, getSchool, updateSchools, deleteSchool };
