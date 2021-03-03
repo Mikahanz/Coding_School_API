@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
+import geocoder from '../utils/geocoder.js';
 import { validateURL, validateEmail } from '../utils/myValidatorUtils.js';
 
 const SchoolSchema = new mongoose.Schema({
@@ -105,6 +106,27 @@ const SchoolSchema = new mongoose.Schema({
 // Create School slug from the name
 SchoolSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+// Geocoder & create location field
+SchoolSchema.pre('save', async function (next) {
+  const loc = await geocoder.geocode(this.address);
+  console.log(loc);
+  this.location = {
+    type: 'Point',
+    coordinates: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+    street: loc[0].streetName,
+    city: loc[0].city,
+    state: loc[0].stateCode,
+    zipcode: loc[0].zipcode,
+    country: loc[0].countryCode,
+  };
+
+  // Do not save address to database
+  this.address = undefined;
+
   next();
 });
 

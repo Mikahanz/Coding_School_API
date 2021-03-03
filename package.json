@@ -17,6 +17,7 @@
     "express-async-handler": "^1.1.4",
     "mongoose": "^5.11.18",
     "morgan": "^1.10.0",
+    "node-geocoder": "^3.27.0",
     "slugify": "^1.4.7",
     "validator": "^13.5.2"
   },
