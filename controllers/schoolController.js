@@ -21,7 +21,7 @@ const getSchools = async (req, res) => {
 // @desc Get School by id
 // @route GET /api/v1/schools/:id
 // @access Public
-const getSchool = async (req, res) => {
+const getSchool = async (req, res, next) => {
   try {
     const school = await SchoolModel.findById(req.params.id);
 
@@ -31,7 +31,8 @@ const getSchool = async (req, res) => {
 
     res.status(200).json({ success: true, data: school });
   } catch (error) {
-    res.status(400).json({ success: false });
+    // res.status(400).json({ success: false });
+    next(error);
   }
 };
 

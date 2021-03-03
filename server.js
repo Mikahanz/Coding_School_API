@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import userRoutes from './routes/userRoutes.js';
 import schoolRoutes from './routes/schoolRoutes.js';
 import connectDB from './config/db.js';
+import errorHandler from './middleware/error.js';
 
 // Load env variables - variables is accessible in process.env<variable name>
 dotenv.config();
@@ -46,6 +47,9 @@ app.use(userRoutes);
 app.use('/api/v1/schools', schoolRoutes);
 
 // END OF ROUTES----------------------------------
+
+//Error Handler
+app.use(errorHandler);
 
 // Port Variable ---------------------------
 const port = process.env.PORT || 5000;
