@@ -37,7 +37,7 @@ const getSchools = asyncHandler(async (req, res, next) => {
   //console.log(req.query);
 
   // Find resources
-  query = SchoolModel.find(JSON.parse(queryStr));
+  query = SchoolModel.find(JSON.parse(queryStr)).populate('courses');
 
   // Select Fields
   if (req.query.select) {
@@ -140,13 +140,15 @@ const updateSchools = asyncHandler(async (req, res, next) => {
 // @route DELETE /api/v1/schools/:id
 // @access Private
 const deleteSchool = asyncHandler(async (req, res, next) => {
-  const school = await SchoolModel.findByIdAndDelete(req.params.id);
+  const school = await SchoolModel.findById(req.params.id);
 
   if (!school) {
     return next(
       new ErrorResponse(`School not found with id of ${req.params.id}`, 404)
     );
   }
+
+  school.remove();
 
   res.status(200).json({ success: true, data: {} });
 });

@@ -33,7 +33,7 @@ const CourseSchema = new mongoose.Schema({
   },
   school: {
     type: mongoose.Schema.ObjectId,
-    ref: 'SchoolModel', // Referrence to SchoolModel
+    ref: 'School', // Referrence to the database School
     required: true,
   },
 });

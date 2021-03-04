@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import ErrorResponse from '../utils/errorResponse.js';
 
 const notFound = (req, res, next) => {
-  console.log(chalk.red('Not Found - 404 Error'));
+  console.log(chalk.red.underline('Not Found - 404 Error'));
   //no specified rout meaning all server requests will pass through this code! if the code above was not resolved
   const error = new Error(`Not Found ${req.originalUrl}`); //req.originalUrl=> is the url the user entered
   res.status(404);
@@ -13,7 +13,7 @@ const notFound = (req, res, next) => {
 const errorsHandler = (err, req, res, next) => {
   // log to console for dev ---------------------------------
   // console.log(err);
-  console.log(chalk.yellow(`${err.name} - ${err.message}`));
+  console.log(chalk.hex('#FFA500').underline(`${err.name} - ${err.message}`));
 
   let error = { ...err };
   //console.log(error);

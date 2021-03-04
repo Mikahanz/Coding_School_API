@@ -15,7 +15,10 @@ const getCourses = asyncHandler(async (req, res, next) => {
   if (req.params.schoolId) {
     query = CourseModel.find({ school: req.params.schoolId });
   } else {
-    query = CourseModel.find();
+    query = CourseModel.find().populate({
+      path: 'school',
+      select: 'name description',
+    });
   }
 
   const courses = await query;
