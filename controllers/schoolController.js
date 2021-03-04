@@ -10,7 +10,21 @@ import ErrorResponse from '../utils/errorResponse.js';
 // @route GET /api/v1/schools
 // @access Public
 const getSchools = asyncHandler(async (req, res, next) => {
-  const schools = await SchoolModel.find({});
+  // let query;
+
+  let queryStr = JSON.stringify(req.query);
+
+  // Replace any gt|gte|lt|lte|in with $ in front of it
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+
+  // /api/v1/schools?averageCost[gte]=10000&location.city=Boston
+  // result queryStr -> {"averageCost":{"$gte":"10000"},"location.city":"Boston"}
+  console.log(queryStr);
+
+  const schools = await SchoolModel.find(JSON.parse(queryStr));
 
   res.status(200).json({ success: true, count: schools.length, data: schools });
 });
