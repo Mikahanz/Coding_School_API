@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import morgan from 'morgan';
 import userRoutes from './routes/userRoutes.js';
 import schoolRoutes from './routes/schoolRoutes.js';
+import courseRoutes from './routes/courseRoutes.js';
 import connectDB from './config/db.js';
 import { errorsHandler, notFound } from './middleware/errorsHandler.js';
 
@@ -45,6 +46,9 @@ app.use(userRoutes);
 
 // Schools Routes
 app.use('/api/v1/schools', schoolRoutes);
+
+// Courses Routes
+app.use('/api/v1/courses', courseRoutes);
 
 // END OF ROUTES----------------------------------
 

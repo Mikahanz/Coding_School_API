@@ -8,7 +8,13 @@ import {
   getSchoolInRadius,
 } from '../controllers/schoolController.js';
 
+// Include other resource routers
+import courseRouter from './courseRoutes.js';
+
 const router = express.Router();
+
+// Re-route into other resource routers
+router.use('/:schoolId/courses', courseRouter);
 
 // @route GET /api/v1/schools
 // @route POST /api/v1/schools

@@ -55,6 +55,7 @@ const getSchools = asyncHandler(async (req, res, next) => {
   }
 
   // Pagination
+  // eg. queryStr -> /api/v1/schools?select=name&limit=1&page=4
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 25;
   const startIndex = limit * (page - 1);
