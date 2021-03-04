@@ -10,8 +10,6 @@ import ErrorResponse from '../utils/errorResponse.js';
 // @route GET /api/v1/schools
 // @access Public
 const getSchools = asyncHandler(async (req, res, next) => {
-  // let query;
-
   let queryStr = JSON.stringify(req.query);
 
   // Replace any gt|gte|lt|lte|in with $ in front of it
