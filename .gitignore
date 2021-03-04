@@ -2,3 +2,5 @@ node_modules/
 config/
 .env
 notes.docx
+seeder.js
+_data/

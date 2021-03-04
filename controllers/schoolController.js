@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import chalk from 'chalk';
+import geocoder from '../utils/geocoder.js';
 import SchoolModel from '../models/SchoolModel.js';
 import ErrorResponse from '../utils/errorResponse.js';
 
@@ -16,7 +17,7 @@ const getSchools = asyncHandler(async (req, res, next) => {
 
 // @desc Get School by id
 // @route GET /api/v1/schools/:id
-// @access Public
+// @access Private
 const getSchool = asyncHandler(async (req, res, next) => {
   const school = await SchoolModel.findById(req.params.id);
 
@@ -31,7 +32,7 @@ const getSchool = asyncHandler(async (req, res, next) => {
 
 // @desc Create new School
 // @route POST /api/v1/schools
-// @access Public
+// @access Private
 const createSchool = asyncHandler(async (req, res, next) => {
   const school = await SchoolModel.create(req.body);
   res.status(201).json({ success: true, data: school });
@@ -39,7 +40,7 @@ const createSchool = asyncHandler(async (req, res, next) => {
 
 // @desc Update School
 // @route UPDATE /api/v1/schools/:id
-// @access Public
+// @access Private
 const updateSchools = asyncHandler(async (req, res, next) => {
   // new: true - means that the new update data will be the new data
   // runValidators - mean that the update data will be validated by the model
@@ -59,7 +60,7 @@ const updateSchools = asyncHandler(async (req, res, next) => {
 
 // @desc Delete School by id
 // @route DELETE /api/v1/schools/:id
-// @access Public
+// @access Private
 const deleteSchool = asyncHandler(async (req, res, next) => {
   const school = await SchoolModel.findByIdAndDelete(req.params.id);
 
@@ -72,4 +73,35 @@ const deleteSchool = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: {} });
 });
 
-export { getSchools, createSchool, getSchool, updateSchools, deleteSchool };
+// @desc Get schools within a radius
+// @route GET /api/v1/schools/radius/:zipcode/:distance
+// @access Private
+const getSchoolInRadius = asyncHandler(async (req, res, next) => {
+  const { zipcode, distance } = req.params;
+
+  // Get lat/long from geocoder
+  const loc = await geocoder.geocode(zipcode);
+
+  const lat = loc[0].latitude;
+  const long = loc[0].longitude;
+
+  // Calc radius using radians
+  // Divide dist by radius of earth
+  // Earth radius = 3963 mi / 6378 km
+  const radius = distance / 3963;
+
+  const schools = await SchoolModel.find({
+    location: { $geoWithin: { $centerSphere: [[long, lat], radius] } },
+  });
+
+  res.status(200).json({ success: true, count: schools.length, data: schools });
+});
+
+export {
+  getSchools,
+  createSchool,
+  getSchool,
+  updateSchools,
+  deleteSchool,
+  getSchoolInRadius,
+};

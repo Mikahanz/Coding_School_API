@@ -5,6 +5,7 @@ import {
   getSchool,
   updateSchools,
   deleteSchool,
+  getSchoolInRadius,
 } from '../controllers/schoolController.js';
 
 const router = express.Router();
@@ -17,5 +18,10 @@ router.route('/').get(getSchools).post(createSchool);
 // @route UPDATE /api/v1/schools/:id
 // @route DELETE /api/v1/schools/:id
 router.route('/:id').get(getSchool).put(updateSchools).delete(deleteSchool);
+
+// @desc Get schools within a radius
+// @route GET /api/v1/schools/radius/:zipcode/:distance
+// @access Private
+router.route('/radius/:zipcode/:distance').get(getSchoolInRadius);
 
 export default router;
