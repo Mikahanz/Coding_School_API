@@ -78,8 +78,7 @@ const getSchools = asyncHandler(async (req, res, next) => {
   }
 
   query = query.limit(limit).skip(startIndex);
-  console.log(page);
-  console.log(limit);
+
   //  executing query
   const schools = await query;
 
