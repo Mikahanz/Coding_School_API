@@ -10,87 +10,8 @@ import ErrorResponse from '../utils/errorResponse.js';
 // @route GET /api/v1/schools
 // @access Public
 const getSchools = asyncHandler(async (req, res, next) => {
-  let query;
-
-  // Copy req.query
-  const reqQuery = { ...req.query }; // This is the same as reqQuery = req.query
-
-  // Fields to exclude
-  const removeFields = ['select', 'sort', 'page', 'limit'];
-
-  // Loop over removeFields and delete them from reqQuery
-  removeFields.forEach((param) => delete reqQuery[param]);
-
-  // Create query string
-  let queryStr = JSON.stringify(reqQuery);
-
-  // Replace any gt|gte|lt|lte|in with $ in front of it
-  queryStr = queryStr.replace(
-    /\b(gt|gte|lt|lte|in)\b/g,
-    (match) => `$${match}`
-  );
-
-  // FOR DEV
-  // /api/v1/schools?averageCost[gte]=10000&location.city=Boston
-  // result queryStr -> {"averageCost":{"$gte":"10000"},"location.city":"Boston"}
-  //console.log(queryStr);
-  //console.log(req.query);
-
-  // Find resources
-  query = SchoolModel.find(JSON.parse(queryStr)).populate('courses');
-
-  // Select Fields
-  if (req.query.select) {
-    const fields = req.query.select.split(',').join(' ');
-    console.log(fields);
-    query = query.select(fields);
-  }
-
-  // Sort fields
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(',').join(' ');
-    query = query.sort(sortBy);
-  } else {
-    query = query.sort('-createdAt');
-  }
-
-  // Pagination
-  // eg. queryStr -> /api/v1/schools?select=name&limit=1&page=4
-  const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 25;
-  const startIndex = limit * (page - 1);
-  const endIndex = page * limit;
-  const totalDocs = await SchoolModel.countDocuments();
-
-  const pagination = {};
-
-  if (totalDocs > endIndex) {
-    pagination.next = {
-      page: page + 1,
-      limit,
-    };
-  }
-
-  if (startIndex > 0) {
-    pagination.prev = {
-      page: page - 1,
-      limit,
-    };
-  }
-
-  query = query.limit(limit).skip(startIndex);
-
-  //  executing query
-  const schools = await query;
-
   // Response to client
-  res.status(200).json({
-    success: true,
-    count: schools.length,
-    page,
-    pagination,
-    data: schools,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc Get School by id

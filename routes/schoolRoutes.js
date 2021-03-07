@@ -10,8 +10,10 @@ import {
   getSchoolInRadius,
   schoolUploadPhoto,
 } from '../controllers/schoolController.js';
+import advancedResults from '../middleware/advancedResults.js';
 import { verifyFile } from '../utils/myValidatorUtils.js';
 import dotenv from 'dotenv';
+import SchoolModel from '../models/SchoolModel.js';
 
 dotenv.config();
 
@@ -53,7 +55,10 @@ router.use('/:schoolId/courses', courseRouter);
 
 // @route GET /api/v1/schools
 // @route POST /api/v1/schools
-router.route('/').get(getSchools).post(createSchool);
+router
+  .route('/')
+  .get(advancedResults(SchoolModel, 'courses'), getSchools)
+  .post(createSchool);
 
 // @route GET /api/v1/schools/:id
 // @route UPDATE /api/v1/schools/:id

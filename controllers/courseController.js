@@ -11,24 +11,15 @@ import SchoolModel from '../models/SchoolModel.js';
 // @route GET /api/v1/schools/:schoolId/courses
 // @access Public
 const getCourses = asyncHandler(async (req, res, next) => {
-  let query;
-
   if (req.params.schoolId) {
-    query = CourseModel.find({ school: req.params.schoolId });
+    const courses = await CourseModel.find({ school: req.params.schoolId });
+
+    return res
+      .status(200)
+      .json({ success: true, count: courses.length, data: courses });
   } else {
-    query = CourseModel.find().populate({
-      path: 'school',
-      select: 'name description',
-    });
+    res.status(200).json(res.advancedResults);
   }
-
-  const courses = await query;
-
-  res.status(200).json({
-    success: true,
-    count: courses.length,
-    data: courses,
-  });
 });
 
 // @desc Get Single Course By Id

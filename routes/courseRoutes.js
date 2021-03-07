@@ -6,10 +6,21 @@ import {
   updateCourse,
   deleteCourse,
 } from '../controllers/courseController.js';
+import CourseModel from '../models/CourseModel.js';
+import advancedResults from '../middleware/advancedResults.js';
 
 const router = express.Router({ mergeParams: true });
 
-router.route('/').get(getCourses).post(addCourse);
+router
+  .route('/')
+  .get(
+    advancedResults(CourseModel, {
+      path: 'school',
+      select: 'name description',
+    }),
+    getCourses
+  )
+  .post(addCourse);
 
 router.route('/:id').get(getCourse).put(updateCourse).delete(deleteCourse);
 
