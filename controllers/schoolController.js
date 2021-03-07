@@ -196,9 +196,9 @@ const schoolUploadPhoto = asyncHandler(async (req, res, next) => {
 
   console.log(req.file.filename);
 
-  // await SchoolModel.findByIdAndUpdate(req.params.id, {
-  //   photo: req.file.path,
-  // });
+  await SchoolModel.findByIdAndUpdate(req.params.id, {
+    photo: req.file.filename,
+  });
 
   res.status(200).json({ success: true, data: req.file.filename });
 });
