@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import chalk from 'chalk';
@@ -51,6 +52,11 @@ app.use('/api/v1/schools', schoolRoutes);
 app.use('/api/v1/courses', courseRoutes);
 
 // END OF ROUTES----------------------------------
+
+// Make uploads folder accessible by the browser by making it static
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, 'public/')));
+//console.log(path.join(__dirname, 'public/uploads/'));
 
 //Error Handler Middleware
 app.use(notFound);

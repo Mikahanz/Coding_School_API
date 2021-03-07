@@ -1,4 +1,6 @@
+import path from 'path';
 import express from 'express';
+import multer from 'multer';
 import {
   getSchools,
   createSchool,
@@ -6,12 +8,45 @@ import {
   updateSchools,
   deleteSchool,
   getSchoolInRadius,
+  schoolUploadPhoto,
 } from '../controllers/schoolController.js';
+import { verifyFile } from '../utils/myValidatorUtils.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+// Configure destination & Filename for Photo Uploads
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, process.env.FILE_UPLOAD_PATH);
+  },
+  filename(req, file, cb) {
+    cb(
+      null,
+      `photo-${req.params.id}-${Date.now()}${path.extname(file.originalname)}`
+    );
+  },
+});
+
+// upload using multer
+const upload = multer({
+  storage,
+  fileFilter: function (req, file, cb) {
+    verifyFile(file, cb);
+  },
+  limits: {
+    fileSize: Number(process.env.MAX_FILE_UPLOAD),
+  },
+});
 
 // Include other resource routers
 import courseRouter from './courseRoutes.js';
 
+// Express Router
 const router = express.Router();
+
+// /api/v1/schools/:id/photo
+router.route('/:id/photo').put(upload.single('avatar'), schoolUploadPhoto);
 
 // Re-route into other resource routers
 router.use('/:schoolId/courses', courseRouter);
@@ -25,9 +60,7 @@ router.route('/').get(getSchools).post(createSchool);
 // @route DELETE /api/v1/schools/:id
 router.route('/:id').get(getSchool).put(updateSchools).delete(deleteSchool);
 
-// @desc Get schools within a radius
 // @route GET /api/v1/schools/radius/:zipcode/:distance
-// @access Private
 router.route('/radius/:zipcode/:distance').get(getSchoolInRadius);
 
 export default router;

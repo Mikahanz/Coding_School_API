@@ -177,6 +177,32 @@ const getSchoolInRadius = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, count: schools.length, data: schools });
 });
 
+// @desc Upload Photo For School by id
+// @route DELETE /api/v1/schools/:id/photo
+// @access Private
+const schoolUploadPhoto = asyncHandler(async (req, res, next) => {
+  const school = await SchoolModel.findById(req.params.id);
+  console.log(`uploading photo.. for school ${req.params.id}`);
+
+  if (!school) {
+    return next(
+      new ErrorResponse(`School not found with id of ${req.params.id}`, 404)
+    );
+  }
+
+  if (!req.file) {
+    return next(new ErrorResponse(`Please upload a file`, 400));
+  }
+
+  console.log(req.file.filename);
+
+  // await SchoolModel.findByIdAndUpdate(req.params.id, {
+  //   photo: req.file.path,
+  // });
+
+  res.status(200).json({ success: true, data: req.file.filename });
+});
+
 export {
   getSchools,
   createSchool,
@@ -184,4 +210,5 @@ export {
   updateSchools,
   deleteSchool,
   getSchoolInRadius,
+  schoolUploadPhoto,
 };
