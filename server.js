@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import userRoutes from './routes/userRoutes.js';
 import schoolRoutes from './routes/schoolRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import connectDB from './config/db.js';
 import { errorsHandler, notFound } from './middleware/errorsHandler.js';
 
@@ -44,6 +45,9 @@ if (process.env.NODE_ENV === 'development') {
 
 // User Routes
 app.use(userRoutes);
+
+// Authentication Routes
+app.use('/api/v1/auth', authRoutes);
 
 // Schools Routes
 app.use('/api/v1/schools', schoolRoutes);
