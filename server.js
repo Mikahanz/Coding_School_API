@@ -8,6 +8,7 @@ import schoolRoutes from './routes/schoolRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import connectDB from './config/db.js';
+import cookieParser from 'cookie-parser';
 import { errorsHandler, notFound } from './middleware/errorsHandler.js';
 
 // Load env variables - variables is accessible in process.env<variable name>
@@ -23,6 +24,9 @@ const app = express();
  * This is a built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser.
  */
 app.use(express.json());
+
+// Cookie-parser
+app.use(cookieParser());
 
 // Middleware - Get request detail
 // const logger = (req, res, next) => {
