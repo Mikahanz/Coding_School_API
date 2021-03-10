@@ -51,6 +51,7 @@ const getCourse = asyncHandler(async (req, res, next) => {
 const addCourse = asyncHandler(async (req, res, next) => {
   const newCourse = req.body;
   newCourse.school = req.params.schoolId;
+  newCourse.user = req.user.id;
 
   console.log(newCourse);
 
@@ -60,6 +61,16 @@ const addCourse = asyncHandler(async (req, res, next) => {
     return next(
       new ErrorResponse(`No School with the id of ${req.params.schoolId}`),
       404
+    );
+  }
+
+  // Make sure user is school owner
+  if (school.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to add a course to school ${school._id}`,
+        401
+      )
     );
   }
 
@@ -88,6 +99,16 @@ const updateCourse = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // Make sure user is course owner
+  if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to update course ${course._id}`,
+        401
+      )
+    );
+  }
+
   course = await CourseModel.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -109,6 +130,16 @@ const deleteCourse = asyncHandler(async (req, res, next) => {
     return next(
       new ErrorResponse(`No Course with the id of ${req.params.id}`),
       404
+    );
+  }
+
+  // Make sure user is course owner
+  if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to delete course ${course._id}`,
+        401
+      )
     );
   }
 

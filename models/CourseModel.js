@@ -36,6 +36,11 @@ const CourseSchema = new mongoose.Schema({
     ref: 'School', // Referrence to the database School
     required: true,
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User', // Referrence to the database User
+    required: true,
+  },
 });
 
 // Static Methods
