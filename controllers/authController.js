@@ -70,4 +70,16 @@ const sendTokenResponse = (user, statusCode, res) => {
     .json({ success: true, token });
 };
 
-export { register, loginUser };
+// @desc GET Current Logged in user
+// @route GET /api/v1/auth/me
+// @access Private
+const getMe = asyncHandler(async (req, res, next) => {
+  const user = await UserModel.findById(req.user.id);
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+export { register, loginUser, getMe };
