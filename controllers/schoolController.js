@@ -59,16 +59,29 @@ const createSchool = asyncHandler(async (req, res, next) => {
 const updateSchools = asyncHandler(async (req, res, next) => {
   // new: true - means that the new update data will be the new data
   // runValidators - mean that the update data will be validated by the model
-  const school = await SchoolModel.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  let school = await SchoolModel.findById(req.params.id);
 
   if (!school) {
     return next(
       new ErrorResponse(`School not found with id of ${req.params.id}`, 404)
     );
   }
+
+  // Make sure user is school owner
+  if (school.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.params.id} is not authorized to update this school`,
+        401
+      )
+    );
+  }
+
+  // Update the school
+  school = await SchoolModel.findOneAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
   res.status(200).json({ success: true, data: school });
 });
@@ -82,6 +95,16 @@ const deleteSchool = asyncHandler(async (req, res, next) => {
   if (!school) {
     return next(
       new ErrorResponse(`School not found with id of ${req.params.id}`, 404)
+    );
+  }
+
+  // Make sure user is school owner
+  if (school.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.params.id} is not authorized to delete this school`,
+        401
+      )
     );
   }
 
@@ -124,6 +147,16 @@ const schoolUploadPhoto = asyncHandler(async (req, res, next) => {
   if (!school) {
     return next(
       new ErrorResponse(`School not found with id of ${req.params.id}`, 404)
+    );
+  }
+
+  // Make sure user is school owner
+  if (school.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.params.id} is not authorized to update this school`,
+        401
+      )
     );
   }
 
