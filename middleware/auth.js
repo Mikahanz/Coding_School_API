@@ -41,7 +41,7 @@ const protect = asyncHandler(async (req, res, next) => {
 // Grant access to specific roles
 const authorize = (...roles) => {
   return (req, res, next) => {
-    console.log(roles);
+    //console.log(roles);
     if (!roles.includes(req.user.role)) {
       return next(
         new ErrorResponse(

@@ -33,6 +33,22 @@ const getSchool = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/schools
 // @access Private
 const createSchool = asyncHandler(async (req, res, next) => {
+  // Add user to req.body >> req.user is from the auth > protect middleware
+  req.body.user = req.user.id;
+
+  // Check for published school
+  const publishedSchool = await SchoolModel.findOne({ user: req.user.id });
+
+  // If the user is not an admin, they can only add one school
+  if (publishedSchool && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `The user with ID ${req.user.id} has already published a school`,
+        400
+      )
+    );
+  }
+
   const school = await SchoolModel.create(req.body);
   res.status(201).json({ success: true, data: school });
 });
