@@ -14,7 +14,7 @@ import advancedResults from '../middleware/advancedResults.js';
 import { verifyFile } from '../utils/myValidatorUtils.js';
 import dotenv from 'dotenv';
 import SchoolModel from '../models/SchoolModel.js';
-import { protect } from '../middleware/auth.js';
+import { protect, authorize } from '../middleware/auth.js';
 
 dotenv.config();
 
@@ -51,7 +51,12 @@ const router = express.Router();
 // /api/v1/schools/:id/photo
 router
   .route('/:id/photo')
-  .put(protect, upload.single('avatar'), schoolUploadPhoto);
+  .put(
+    protect,
+    authorize('admin', 'publisher'),
+    upload.single('avatar'),
+    schoolUploadPhoto
+  );
 
 // Re-route into other resource routers
 router.use('/:schoolId/courses', courseRouter);
@@ -61,7 +66,7 @@ router.use('/:schoolId/courses', courseRouter);
 router
   .route('/')
   .get(advancedResults(SchoolModel, 'courses'), getSchools)
-  .post(protect, createSchool);
+  .post(protect, authorize('admin', 'publisher'), createSchool);
 
 // @route GET /api/v1/schools/:id
 // @route UPDATE /api/v1/schools/:id
@@ -69,8 +74,8 @@ router
 router
   .route('/:id')
   .get(getSchool)
-  .put(protect, updateSchools)
-  .delete(protect, deleteSchool);
+  .put(protect, authorize('admin', 'publisher'), updateSchools)
+  .delete(protect, authorize('admin', 'publisher'), deleteSchool);
 
 // @route GET /api/v1/schools/radius/:zipcode/:distance
 router.route('/radius/:zipcode/:distance').get(getSchoolInRadius);
