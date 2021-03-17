@@ -7,6 +7,7 @@ import userRoutes from './routes/userRoutes.js';
 import schoolRoutes from './routes/schoolRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
 import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 import { errorsHandler, notFound } from './middleware/errorsHandler.js';
@@ -58,6 +59,9 @@ app.use('/api/v1/schools', schoolRoutes);
 
 // Courses Routes
 app.use('/api/v1/courses', courseRoutes);
+
+// Reviews Routes
+app.use('/api/v1/reviews', reviewRoutes);
 
 // END OF ROUTES----------------------------------
 

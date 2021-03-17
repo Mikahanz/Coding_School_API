@@ -44,6 +44,7 @@ const upload = multer({
 
 // Include other resource routers
 import courseRouter from './courseRoutes.js';
+import reviewRouter from './reviewRoutes.js';
 
 // Express Router
 const router = express.Router();
@@ -60,6 +61,9 @@ router
 
 // Re-route into other resource routers
 router.use('/:schoolId/courses', courseRouter);
+
+// Re-route into other resource routers
+router.use('/:schoolId/reviews', reviewRouter);
 
 // @route GET /api/v1/schools
 // @route POST /api/v1/schools
