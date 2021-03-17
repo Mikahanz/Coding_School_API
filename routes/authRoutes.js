@@ -4,6 +4,7 @@ import {
   register,
   getMe,
   forgotPassword,
+  resetPassword,
 } from '../controllers/authController.js';
 import { protect } from '../middleware/auth.js';
 
@@ -16,6 +17,9 @@ router
   .post('/register', register)
   .post('/login', loginUser)
   .post('/forgotpassword', forgotPassword);
+
+// @route PUT /api/v1/resetpassword/:resettoken
+router.route('/resetpassword/:resettoken').put(resetPassword);
 
 // @route GET /api/v1/auth/me
 router.route('/me').get(protect, getMe);

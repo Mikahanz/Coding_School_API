@@ -4,6 +4,7 @@ import SchoolModel from '../models/SchoolModel.js';
 import ErrorResponse from '../utils/errorResponse.js';
 import UserModel from '../models/UserModel.js';
 import sendEmail from '../utils/sendEmail.js';
+import crypto from 'crypto';
 
 // @desc POST Register new user
 // @route POST /api/v1/auth/register
@@ -79,7 +80,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   // Create reset url
   const resetUrl = `${req.protocol}://${req.get(
     'host'
-  )}/api/v1/resetpassword/${resetToken}`;
+  )}/api/v1/auth/resetpassword/${resetToken}`;
 
   const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`;
 
@@ -107,11 +108,45 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc Reset password
+// @route PUT /api/v1/auth/resetpassword/:resettoken
+// @access Public
+const resetPassword = asyncHandler(async (req, res, next) => {
+  // Get hashed token
+  const resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(req.params.resettoken)
+    .digest('hex');
+
+  // Find user with provided resetPasswordToken with valid expiry date
+  const user = await UserModel.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new ErrorResponse('Invalid Token', 400));
+  }
+
+  // Set new password
+  user.password = req.body.password;
+
+  // Set resetPasswordToken, and resetPasswordExpire to undifined
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+
+  // Save user
+  await user.save();
+
+  sendTokenResponse(user, 200, res);
+});
+
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
   // create token
   const token = user.getSignedJwtToken();
 
+  // Set cookie options
   const options = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
@@ -119,6 +154,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     httpOnly: true,
   };
 
+  // Set options.secure to true when in production environment
   if (process.env.NODE_ENV === 'production') {
     options.secure = true;
   }
@@ -129,4 +165,4 @@ const sendTokenResponse = (user, statusCode, res) => {
     .json({ success: true, token });
 };
 
-export { register, loginUser, getMe, forgotPassword };
+export { register, loginUser, getMe, forgotPassword, resetPassword };
