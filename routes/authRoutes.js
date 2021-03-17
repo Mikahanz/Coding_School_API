@@ -5,6 +5,8 @@ import {
   getMe,
   forgotPassword,
   resetPassword,
+  updateDetails,
+  updatepassword,
 } from '../controllers/authController.js';
 import { protect } from '../middleware/auth.js';
 
@@ -20,6 +22,12 @@ router
 
 // @route PUT /api/v1/resetpassword/:resettoken
 router.route('/resetpassword/:resettoken').put(resetPassword);
+
+// @route PUT /api/v1/auth/updatedetails
+router.route('/updatedetails').put(protect, updateDetails);
+
+// @route PUT /api/v1/auth/updatepassword
+router.route('/updatepassword').put(protect, updatepassword);
 
 // @route GET /api/v1/auth/me
 router.route('/me').get(protect, getMe);
