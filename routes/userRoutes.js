@@ -1,12 +1,23 @@
 import express from 'express';
-import { greeting } from '../controllers/userController.js';
+import {
+  getUsers,
+  getUser,
+  deleteUser,
+  createUser,
+  updateUser,
+} from '../controllers/userController.js';
+import UserModel from '../models/UserModel.js';
+import advancedResults from '../middleware/advancedResults.js';
+import { protect, authorize } from '../middleware/auth.js';
 
-// Create express router
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
-// @desc GET default endpoint
-// @route GET /
-// @access Public
-router.route('/').get(greeting);
+// Protect & Authorize all the routes below
+router.use(protect);
+router.use(authorize('admin'));
+
+router.route('/').get(advancedResults(UserModel), getUsers).post(createUser);
+
+router.route('/:id').get(getUser).put(updateUser).delete(deleteUser);
 
 export default router;

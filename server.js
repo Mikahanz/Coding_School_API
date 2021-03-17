@@ -48,7 +48,7 @@ if (process.env.NODE_ENV === 'development') {
 // ROUTES----------------------------------
 
 // User Routes
-app.use(userRoutes);
+app.use('/api/v1/users', userRoutes);
 
 // Authentication Routes
 app.use('/api/v1/auth', authRoutes);
