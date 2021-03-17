@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   getReviews,
-  //   getReview,
+  getReview,
   //   addReview,
   //   updateReview,
   //   deleteReview,
@@ -19,5 +19,7 @@ router.route('/').get(
   }),
   getReviews
 );
+
+router.route('/:id').get(getReview);
 
 export default router;
