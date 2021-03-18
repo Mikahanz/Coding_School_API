@@ -51,6 +51,7 @@ CourseSchema.statics.getAverageCost = async function (schoolId) {
   ]);
 
   try {
+    // Use the SchoolModel
     await this.model('School').findByIdAndUpdate(schoolId, {
       averageCost: Math.ceil(obj[0].averageCost / 10) * 10,
     });

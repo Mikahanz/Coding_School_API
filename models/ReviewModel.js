@@ -36,6 +36,31 @@ const ReviewSchema = new mongoose.Schema({
 // Allows user only submit one review per school
 ReviewSchema.index({ school: 1, user: 1 }, { unique: true });
 
-ReviewSchema.index();
+// Static Method to get average rating and save
+ReviewSchema.statics.getAverageRating = async function (schoolId) {
+  const obj = await this.aggregate([
+    { $match: { school: schoolId } },
+    { $group: { _id: '$school', averageRating: { $avg: '$rating' } } },
+  ]);
+
+  try {
+    // Use the SchoolModel
+    await this.model('School').findByIdAndUpdate(schoolId, {
+      averageRating: obj[0].averageRating,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Call getAverageCost after save
+ReviewSchema.post('save', function () {
+  this.constructor.getAverageRating(this.school);
+});
+
+// Call getAverageCost before remove
+ReviewSchema.pre('remove', function () {
+  this.constructor.getAverageRating(this.school);
+});
 
 export default mongoose.model('Review', ReviewSchema);
