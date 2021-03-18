@@ -42,4 +42,34 @@ const getReview = asyncHandler(async (req, res, next) => {
   });
 });
 
-export { getReviews, getReview };
+// @desc Add review
+// @route POST /api/v1/schools/:schoolId/reviews
+// @access Private
+const addReview = asyncHandler(async (req, res, next) => {
+  const school = await SchoolModel.findById(req.params.schoolId);
+
+  if (!school) {
+    return next(
+      new ErrorResponse(
+        `No school found with id of ${req.params.schoolId}`,
+        404
+      )
+    );
+  }
+
+  req.body.school = req.params.schoolId;
+  req.body.user = req.user.id;
+
+  const review = await ReviewModel.create(req.body);
+
+  if (!review) {
+    return next(new ErrorResponse(`Failed adding review`, 400));
+  }
+
+  res.status(201).json({
+    success: true,
+    data: review,
+  });
+});
+
+export { getReviews, getReview, addReview };

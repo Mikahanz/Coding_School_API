@@ -33,4 +33,9 @@ const ReviewSchema = new mongoose.Schema({
   },
 });
 
+// Allows user only submit one review per school
+ReviewSchema.index({ school: 1, user: 1 }, { unique: true });
+
+ReviewSchema.index();
+
 export default mongoose.model('Review', ReviewSchema);
