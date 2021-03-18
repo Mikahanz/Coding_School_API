@@ -57,6 +57,7 @@ const addReview = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // create 2 new fields 'school and user' for req.body object
   req.body.school = req.params.schoolId;
   req.body.user = req.user.id;
 
@@ -72,4 +73,57 @@ const addReview = asyncHandler(async (req, res, next) => {
   });
 });
 
-export { getReviews, getReview, addReview };
+// @desc Update review
+// @route PUT /api/v1/reviews/:id
+// @access Private
+const updateReview = asyncHandler(async (req, res, next) => {
+  let review = await ReviewModel.findById(req.params.id);
+
+  if (!review) {
+    return next(
+      new ErrorResponse(`No review found with id of ${req.params.id}`, 404)
+    );
+  }
+
+  // Make sure review belongs to user or user is admin
+  if (review.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`Not authorized to update review`, 401));
+  }
+
+  review = await ReviewModel.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidator: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: review,
+  });
+});
+
+// @desc Delete review
+// @route DELETE /api/v1/reviews/:id
+// @access Private
+const deleteReview = asyncHandler(async (req, res, next) => {
+  const review = await ReviewModel.findById(req.params.id);
+
+  if (!review) {
+    return next(
+      new ErrorResponse(`No review found with id of ${req.params.id}`, 404)
+    );
+  }
+
+  // Make sure review belongs to user or user is admin
+  if (review.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`Not authorized to update review`, 401));
+  }
+
+  await review.remove();
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
+});
+
+export { getReviews, getReview, addReview, updateReview, deleteReview };

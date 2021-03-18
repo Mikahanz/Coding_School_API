@@ -3,8 +3,8 @@ import {
   getReviews,
   getReview,
   addReview,
-  //   updateReview,
-  //   deleteReview,
+  updateReview,
+  deleteReview,
 } from '../controllers/reviewController.js';
 import ReviewModel from '../models/ReviewModel.js';
 import advancedResults from '../middleware/advancedResults.js';
@@ -23,6 +23,10 @@ router
   )
   .post(protect, authorize('user', 'admin'), addReview);
 
-router.route('/:id').get(getReview);
+router
+  .route('/:id')
+  .get(getReview)
+  .put(protect, authorize('user', 'admin'), updateReview)
+  .delete(protect, authorize('user', 'admin'), deleteReview);
 
 export default router;
