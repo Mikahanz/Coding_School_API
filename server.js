@@ -11,6 +11,7 @@ import reviewRoutes from './routes/reviewRoutes.js';
 import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 import { errorsHandler, notFound } from './middleware/errorsHandler.js';
+import mongoSanitize from 'express-mongo-sanitize';
 
 // Load env variables - variables is accessible in process.env<variable name>
 dotenv.config();
@@ -45,6 +46,9 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+// Sanitize data
+app.use(mongoSanitize());
 
 // ROUTES----------------------------------
 
