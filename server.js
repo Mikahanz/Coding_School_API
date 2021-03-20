@@ -14,6 +14,9 @@ import { errorsHandler, notFound } from './middleware/errorsHandler.js';
 import mongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
 import xss from 'xss-clean';
+import rateLimit from 'express-rate-limit';
+import hpp from 'hpp';
+import cors from 'cors';
 
 // Load env variables - variables is accessible in process.env<variable name>
 dotenv.config();
@@ -57,6 +60,19 @@ app.use(helmet());
 
 // Prevent XSS(Cross Site Scripting) attack
 app.use(xss());
+
+// Rate limiting - 100 request per 10 mins
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 mins
+  max: 100,
+});
+app.use(limiter);
+
+// Prevent Http param polution
+app.use(hpp());
+
+// Enable Cors
+app.use(cors());
 
 // ROUTES----------------------------------
 
