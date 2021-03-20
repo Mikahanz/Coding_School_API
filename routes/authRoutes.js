@@ -7,6 +7,7 @@ import {
   resetPassword,
   updateDetails,
   updatepassword,
+  logout,
 } from '../controllers/authController.js';
 import { protect } from '../middleware/auth.js';
 
@@ -19,6 +20,9 @@ router
   .post('/register', register)
   .post('/login', loginUser)
   .post('/forgotpassword', forgotPassword);
+
+// @route GET /api/v1/auth/logout
+router.route('/logout').get(protect, logout);
 
 // @route PUT /api/v1/resetpassword/:resettoken
 router.route('/resetpassword/:resettoken').put(resetPassword);
