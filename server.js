@@ -12,6 +12,8 @@ import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 import { errorsHandler, notFound } from './middleware/errorsHandler.js';
 import mongoSanitize from 'express-mongo-sanitize';
+import helmet from 'helmet';
+import xss from 'xss-clean';
 
 // Load env variables - variables is accessible in process.env<variable name>
 dotenv.config();
@@ -49,6 +51,12 @@ if (process.env.NODE_ENV === 'development') {
 
 // Sanitize data
 app.use(mongoSanitize());
+
+//Set security headers
+app.use(helmet());
+
+// Prevent XSS(Cross Site Scripting) attack
+app.use(xss());
 
 // ROUTES----------------------------------
 
