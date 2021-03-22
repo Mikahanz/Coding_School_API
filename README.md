@@ -1,42 +1,42 @@
 CodingSchool Backend API Specifications
 
-Create the backend for a school directory website. The html/css template has been created and can be used as a reference for functionality. 
+This is a backend RESTful API for a school directory website. The html/css template has been created and can be used as a reference for functionality. 
 All of the functionality below has been fully implmented in this project.
 
-### Bootcamps
-- List all bootcamps in the database
+### Schools
+- List all schools in the database
    * Pagination
    * Select specific fields in result
    * Limit number of results
    * Filter by fields
-- Search bootcamps by radius from zipcode
+- Search schools by radius from zipcode
   * Use a geocoder to get exact location and coords from a single address field
-- Get single bootcamp
-- Create new bootcamp
+- Get single school
+- Create new school
   * Authenticated users only
   * Must have the role "publisher" or "admin"
-  * Only one bootcamp per publisher (admins can create more)
+  * Only one school per publisher (admins can create more)
   * Field validation via Mongoose
-- Upload a photo for bootcamp
+- Upload a photo for school
   * Owner only
   * Photo will be uploaded to local filesystem
-- Update bootcamps
+- Update schools
   * Owner only
   * Validation on update
-- Delete Bootcamp
+- Delete school
   * Owner only
-- Calculate the average cost of all courses for a bootcamp
-- Calculate the average rating from the reviews for a bootcamp
+- Calculate the average cost of all courses for a school
+- Calculate the average rating from the reviews for a school
 
 ### Courses
-- List all courses for bootcamp
+- List all courses for school
 - List all courses in general
   * Pagination, filtering, etc
 - Get single course
 - Create new course
   * Authenticated users only
   * Must have the role "publisher" or "admin"
-  * Only the owner or an admin can create a course for a bootcamp
+  * Only the owner or an admin can create a course for a school
   * Publishers can create multiple courses
 - Update course
   * Owner only
@@ -44,7 +44,7 @@ All of the functionality below has been fully implmented in this project.
   * Owner only
   
 ### Reviews
-- List all reviews for a bootcamp
+- List all reviews for a school
 - List all reviews in general
   * Pagination, filtering, etc
 - Get a single review
