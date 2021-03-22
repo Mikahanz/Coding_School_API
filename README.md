@@ -1,4 +1,4 @@
-CodingSchool Backend API Specifications
+#### CodingSchool Backend API Specifications
 
 This is a backend RESTful API for a school directory website. The html/css template has been created and can be used as a reference for functionality. 
 All of the functionality below has been fully implmented in this project.
