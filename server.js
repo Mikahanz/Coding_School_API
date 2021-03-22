@@ -56,7 +56,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(mongoSanitize());
 
 //Set security headers
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 
 // Prevent XSS(Cross Site Scripting) attack
 app.use(xss());
