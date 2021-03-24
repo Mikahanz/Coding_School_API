@@ -95,12 +95,12 @@ app.use('/api/v1/reviews', reviewRoutes);
 
 // Make uploads folder accessible by the browser by making it static
 const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, 'public/')));
+app.use(express.static(path.join(__dirname, '/public')));
 //console.log(path.join(__dirname, 'public/uploads/'));
 
 // Production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'public/')));
+  app.use(express.static(path.join(__dirname, '/public')));
 
   app.get('*', (req, res) =>
     res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
