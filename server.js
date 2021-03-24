@@ -1,5 +1,6 @@
 import path from 'path';
 import express from 'express';
+import connectDB from './config/db.js';
 import dotenv from 'dotenv';
 import chalk from 'chalk';
 import morgan from 'morgan';
@@ -8,7 +9,6 @@ import schoolRoutes from './routes/schoolRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
-import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 import { errorsHandler, notFound } from './middleware/errorsHandler.js';
 import mongoSanitize from 'express-mongo-sanitize';
