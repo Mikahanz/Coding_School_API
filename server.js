@@ -1,6 +1,6 @@
 import path from 'path';
 import express from 'express';
-import connectDB from './config/db.js';
+//import connectDB from './config/db.js';
 import dotenv from 'dotenv';
 import chalk from 'chalk';
 import morgan from 'morgan';
@@ -22,7 +22,7 @@ import cors from 'cors';
 dotenv.config();
 
 // Connect to database
-connectDB();
+//connectDB();
 
 // Create express app
 const app = express();
