@@ -43,7 +43,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   const limit = Number(req.query.limit) || 25;
   const startIndex = limit * (page - 1);
   const endIndex = page * limit;
-  const totalDocs = await model.countDocuments({});
+  const totalDocs = await model.countDocuments();
 
   query = query.limit(limit).skip(startIndex);
 
