@@ -97,7 +97,7 @@ All of the functionality below has been fully implmented in this project.
 - Use docgen to create HTML files from Postman
 - Add html files as the / route for the api
 
-## Deployment (Digital Ocean)
+## Deployment (Heroku)
 - Push to Github
 - Create a droplet - https://m.do.co/c/5424d440c63a
 - Clone repo on to server
