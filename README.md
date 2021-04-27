@@ -1,5 +1,7 @@
 ### CodingSchool Backend API Specifications
 
+https://codingschool-rest-api.herokuapp.com/
+
 This is a backend RESTful API for a school directory website. The html/css template has been created and can be used as a reference for functionality. 
 All of the functionality below has been fully implmented in this project.
 
@@ -99,13 +101,8 @@ All of the functionality below has been fully implmented in this project.
 
 ## Deployment (Heroku)
 - Push to Github
-- Create a droplet - https://m.do.co/c/5424d440c63a
 - Clone repo on to server
-- Use PM2 process manager
-- Enable firewall (ufw) and open needed ports
-- Create an NGINX reverse proxy for port 80
-- Connect a domain name
-- Install an SSL using Let's Encrypt
+- Push to Heroku
 
 ## Code Related Suggestions
 - NPM scripts for dev and production env
